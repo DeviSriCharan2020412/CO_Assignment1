@@ -2,4 +2,4 @@
 
 # Add command to run your program here
 echo "Hello World"
-./run --no-sim
+python3 Assembler.py $@
