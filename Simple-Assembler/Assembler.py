@@ -70,9 +70,11 @@ def error_identifier(list1, list2, labels, label_addr):
     s = 0
 
     if var != list(set(var)):
+        checker = True
         print(Fore.RED + "Error>> Misuse of variables ")
 
     if labels != list(set(labels)):
+        checker = True
         print(Fore.RED + "Error>> Misuse of labels ")
 
     for k in range(len(code)):
@@ -91,14 +93,14 @@ def error_identifier(list1, list2, labels, label_addr):
             s += 1
 
         if len(code[k]) > 4:
+            checker = True
             print(Fore.RED + "Error>> Line: " + str(k + 1) + " Wrong syntax used for instructions")
 
         elif (len(code[k])) == 4:
             if code[k][0] not in list_typeA and code[k][0][-1] != ":":
                 checker = True
                 print(Fore.RED + "Error>> Line: " + str(k + 1) + " Typos in instruction name")
-                if (code[k][1] not in list_register) or (code[k][2] not in list_register) or (
-                        code[k][3] not in list_register):
+                if (code[k][1] not in list_register) or (code[k][2] not in list_register) or (code[k][3] not in list_register):
                     checker = True
                     print(Fore.RED + "Error>> Line: " + str(k + 1) + " Typos in register name")
 
@@ -109,25 +111,21 @@ def error_identifier(list1, list2, labels, label_addr):
 
             if code[k][0] in list_typeB:
                 if code[k][1] not in list_register:
-                    print("TYPE_B")
                     checker = True
                     print(Fore.RED + "Error>> Line: " + str(k + 1) + " Typos in register name")
 
                 if code[k][2][0] == "$":
                     if int(code[k][2][1:]) > 255 or int(code[k][2][1:]) < 0:
                         checker = True
-                        print(Fore.RED + "Error>> Line: " + str(
-                            k + 1) + " Illegal Immediate values (less than 0 or more than 255)")
+                        print(Fore.RED + "Error>> Line: " + str(k + 1) + " Illegal Immediate values (less than 0 or more than 255)")
 
             if (code[k][0] in list_typeC) and code[k][2][0] != "$":
                 if (code[k][1] not in list_register) or (code[k][2] not in list_register):
-                    print("TYPE_C")
                     checker = True
                     print(Fore.RED + "Error>> Line: " + str(k + 1) + " Typos in register name")
 
             if code[k][0] in list_typeD:
                 if code[k][1] not in list_register:
-                    print("TYPE_D")
                     checker = True
                     print(Fore.RED + "Error>> Line: " + str(k + 1) + " Typos in register name")
 
@@ -146,6 +144,7 @@ def error_identifier(list1, list2, labels, label_addr):
 
             if code[k][0] in list_typeE:
                 if code[k][1] not in labels:
+                    checker = True
                     print(Fore.RED + "Error>> Line: " + str(k + 1) + " Use of undefined labels")
 
                 if code[k][1] in var:
@@ -161,6 +160,7 @@ def error_identifier(list1, list2, labels, label_addr):
             count_hlt += 1
             temp = False
         else:
+            checker = True
             print(Fore.RED + "Error>> Line: " + str(k + 1) + " Wrong syntax used for instructions")
 
     if temp:
@@ -256,7 +256,7 @@ def main():
 
         except EOFError:
             break
-    
+
     if not error_identifier(list1, list2, labels, labels_addr):
         ans(list1, list2, labels, labels_addr)
 
