@@ -256,8 +256,7 @@ def main():
 
         except EOFError:
             break
-    print(list1)
-    print(list2)
+    
     if not error_identifier(list1, list2, labels, labels_addr):
         ans(list1, list2, labels, labels_addr)
 
