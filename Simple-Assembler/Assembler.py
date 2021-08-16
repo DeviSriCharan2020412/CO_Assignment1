@@ -1,4 +1,4 @@
-from colorama import Fore
+import sys
 
 
 def TypeA(instruction, reg1, reg2, reg3):
@@ -69,13 +69,13 @@ def error_identifier(list1, list2, labels, label_addr):
     count_hlt = 0
     s = 0
 
-    if var != list(set(var)):
-        checker = True
-        print(Fore.RED + "Error>> Misuse of variables ")
-
-    if labels != list(set(labels)):
-        checker = True
-        print(Fore.RED + "Error>> Misuse of labels ")
+    # if var != list(set(var)):
+    #     checker = True
+    #     sys.stdout.write("Error>> Misuse of variables\n")
+    #
+    # if labels != list(set(labels)):
+    #     checker = True
+    #     sys.stdout.write("Error>> Misuse of labels\n")
 
     for k in range(len(code)):
         if code[k][0] != "var":
@@ -89,90 +89,90 @@ def error_identifier(list1, list2, labels, label_addr):
                     break
             if not temp1:
                 checker = True
-                print(Fore.RED + "Error>> Line:" + str(k + 1) + " not a correct label name")
+                sys.stdout.write("Error>> Line:" + str(k + 1) + " not a correct label name\n")
             s += 1
 
         if len(code[k]) > 4:
             checker = True
-            print(Fore.RED + "Error>> Line: " + str(k + 1) + " Wrong syntax used for instructions")
+            sys.stdout.write("Error>> Line: " + str(k + 1) + " Wrong syntax used for instructions\n")
 
         elif (len(code[k])) == 4:
             if code[k][0] not in list_typeA and code[k][0][-1] != ":":
                 checker = True
-                print(Fore.RED + "Error>> Line: " + str(k + 1) + " Typos in instruction name")
+                sys.stdout.write("Error>> Line: " + str(k + 1) + " Typos in instruction name\n")
                 if (code[k][1] not in list_register) or (code[k][2] not in list_register) or (code[k][3] not in list_register):
                     checker = True
-                    print(Fore.RED + "Error>> Line: " + str(k + 1) + " Typos in register name")
+                    sys.stdout.write("Error>> Line: " + str(k + 1) + " Typos in register name\n")
 
         elif (len(code[k])) == 3:
             if (code[k][0] not in list_typeB) and (code[k][0] not in list_typeC) and (code[k][0] not in list_typeD):
                 checker = True
-                print(Fore.RED + "Error>> Line: " + str(k + 1) + " Wrong syntax used for instructions")
+                sys.stdout.write("Error>> Line: " + str(k + 1) + " Wrong syntax used for instructions\n")
 
             if code[k][0] in list_typeB:
                 if code[k][1] not in list_register:
                     checker = True
-                    print(Fore.RED + "Error>> Line: " + str(k + 1) + " Typos in register name")
+                    sys.stdout.write("Error>> Line: " + str(k + 1) + " Typos in register name\n")
 
                 if code[k][2][0] == "$":
                     if int(code[k][2][1:]) > 255 or int(code[k][2][1:]) < 0:
                         checker = True
-                        print(Fore.RED + "Error>> Line: " + str(k + 1) + " Illegal Immediate values (less than 0 or more than 255)")
+                        sys.stdout.write("Error>> Line: " + str(k + 1) + " Illegal Immediate values (less than 0 or more than 255)\n")
 
             if (code[k][0] in list_typeC) and code[k][2][0] != "$":
                 if (code[k][1] not in list_register) or (code[k][2] not in list_register):
                     checker = True
-                    print(Fore.RED + "Error>> Line: " + str(k + 1) + " Typos in register name")
+                    sys.stdout.write("Error>> Line: " + str(k + 1) + " Typos in register name\n")
 
             if code[k][0] in list_typeD:
                 if code[k][1] not in list_register:
                     checker = True
-                    print(Fore.RED + "Error>> Line: " + str(k + 1) + " Typos in register name")
+                    sys.stdout.write("Error>> Line: " + str(k + 1) + " Typos in register name\n")
 
                 if code[k][2] not in var:
                     checker = True
-                    print(Fore.RED + "Error>> Line: " + str(k + 1) + " Use of undefined variables")
+                    sys.stdout.write("Error>> Line: " + str(k + 1) + " Use of undefined variables\n")
 
                 if code[k][2] in labels:
                     checker = True
-                    print(Fore.RED + "Error>> Line: " + str(k + 1) + " Misuse of labels as variables or vice-versa")
+                    sys.stdout.write("Error>> Line: " + str(k + 1) + " Misuse of labels as variables or vice-versa\n")
 
         elif (len(code[k])) == 2:
             if code[k][0] not in list_typeE and code[k][0] != "var":
                 checker = True
-                print(Fore.RED + "Error>> Line: " + str(k + 1) + " Wrong syntax used for instructions")
+                sys.stdout.write("Error>> Line: " + str(k + 1) + " Wrong syntax used for instructions\n")
 
             if code[k][0] in list_typeE:
                 if code[k][1] not in labels:
                     checker = True
-                    print(Fore.RED + "Error>> Line: " + str(k + 1) + " Use of undefined labels")
+                    sys.stdout.write("Error>> Line: " + str(k + 1) + " Use of undefined labels\n")
 
                 if code[k][1] in var:
                     checker = True
-                    print(Fore.RED + "Error>> Line: " + str(k + 1) + " Misuse of labels as variables or vice-versa")
+                    sys.stdout.write("Error>> Line: " + str(k + 1) + " Misuse of labels as variables or vice-versa\n")
 
             if code[k][0] == "var":
                 if not tempvar:
                     checker = True
-                    print(Fore.RED + "Error>> Line: " + str(k + 1) + " Variable not defined at the beginning")
+                    sys.stdout.write("Error>> Line: " + str(k + 1) + " Variable not defined at the beginning\n")
 
         elif code[k][0] == 'hlt':
             count_hlt += 1
             temp = False
         else:
             checker = True
-            print(Fore.RED + "Error>> Line: " + str(k + 1) + " Wrong syntax used for instructions")
+            sys.stdout.write("Error>> Line: " + str(k + 1) + " Wrong syntax used for instructions\n")
 
     if temp:
         checker = True
-        print(Fore.RED + "Error>> Missing hlt instruction")
+        sys.stdout.write("Error>> Missing hlt instruction\n")
 
     if not temp and code[end][0] != "hlt":
         checker = True
-        print(Fore.RED + "Error>> hlt not being used as the last instruction")
+        sys.stdout.write("Error>> hlt not being used as the last instruction\n")
     if count_hlt > 1:
         checker = True
-        print(Fore.RED + "Error>> Wrong syntax used for instructions")
+        sys.stdout.write("Error>> Wrong syntax used for instructions\n")
 
     return checker
 
@@ -180,28 +180,28 @@ def error_identifier(list1, list2, labels, label_addr):
 def ans(list1, list2, labels, labels_addr):
     for i in list1:
         if i[0] == "hlt":
-            print("1001100000000000")
+            sys.stdout.write("1001100000000000" + "\n")
             break
 
         if len(i) == 4:
             if i[0] == "add" or i[0] == "mul" or i[0] == "and" or i[0] == "sub" or i[0] == "xor" or i[0] == "or":
-                print(Fore.WHITE + TypeA(i[0], i[1], i[2], i[3]))
+                sys.stdout.write(TypeA(i[0], i[1], i[2], i[3]) + "\n")
 
         elif len(i) == 3:
             if i[0] == "mov":
                 if i[2][0] == "$":
-                    print(Fore.WHITE + TypeB(i[0], i[1], int(i[2][1:])))
+                    sys.stdout.write(TypeB(i[0], i[1], int(i[2][1:])) + "\n")
                 else:
-                    print(Fore.WHITE + TypeC(i[0], i[1], i[2]))
+                    sys.stdout.write(TypeC(i[0], i[1], i[2]) + "\n")
 
             elif i[0] == "rs" or i[0] == "ls":
-                print(Fore.WHITE + TypeB(i[0], i[1], int(i[2][1:])))
+                sys.stdout.write(TypeB(i[0], i[1], int(i[2][1:])) + "\n")
 
             elif i[0] == "div" or i[0] == "not" or i[0] == "cmp":
-                print(Fore.WHITE + TypeC(i[0], i[1], i[2]))
+                sys.stdout.write(TypeC(i[0], i[1], i[2]) + "\n")
 
             elif i[0] == "ld" or i[0] == "st":
-                print(Fore.WHITE + TypeD(i[0], i[1], mem_address(list1, list2, i[2])))
+                sys.stdout.write(TypeD(i[0], i[1], mem_address(list1, list2, i[2])) + "\n")
 
         elif len(i) == 2:
             if i[0] == "jmp" or i[0] == "jlt" or i[0] == "jgt" or i[0] == "je":
@@ -209,7 +209,7 @@ def ans(list1, list2, labels, labels_addr):
                 for j in range(len(labels)):
                     if i[1] == labels[j]:
                         label_addr = labels_addr[j]
-                print(Fore.WHITE + TypeE(i[0], label_addr))
+                sys.stdout.write(TypeE(i[0], label_addr) + "\n")
 
 
 def main():
