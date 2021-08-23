@@ -1,10 +1,13 @@
 import sys
+import matplotlib.pyplot as plt
 
 
 class Memory:
 
     def __init__(self):
         self.mem = ["0000000000000000"] * 256
+        self.programCounter = []
+        self.cycle = []
         i = 0
         while True:
             try:
@@ -15,15 +18,29 @@ class Memory:
                 break
 
     def fetch(self, addr, cycle):
+        self.programCounter.append(addr)
+        self.cycle.append(cycle)
         return self.mem[addr]
 
     def dump(self):
         for i in self.mem:
             sys.stdout.write(i+"\n")
-        # print(*self.mem, sep="\n")
 
-    # def showTraces(self):
-    #     pass
+    def showTraces(self):
+
+        x = self.cycle
+        y = self.programCounter
+
+        plt.scatter(x, y)
+        plt.savefig('.\plot.png')
+
+        plt.xlabel('Cycle')
+        plt.ylabel('Memory Address')
+
+        plt.title("Memory Accesses v/s Cycles")
+
+        plt.show()
+
 
 
 class RegisterFile:
@@ -31,9 +48,6 @@ class RegisterFile:
         self.registerList = ["0000000000000000"] * 8
 
     def dump(self):
-        # for i in self.registerList:
-        #     sys.stdout.write(i+" ")
-        # # sys.stdout.write(*s)
         print(*self.registerList)
 
 
@@ -61,13 +75,6 @@ class ExecutionEngine:
         self.registerFile = registerFile.registerList
 
     def execute(self, inst, cycle):
-        # dicA = {"add": "00000", "sub": "00001", "mul": "00110", "xor": "01010", "or": "01011", "and": "01100"}
-        # dicB = {"mov": "00010", "rs": "'01000", "ls": "01001"}
-        # dicC = {"mov": "00011", "div": "00111", "not": "01101", "cmp": "01110"}
-        # dicD = {"ld": "00100", "st": "00101"}
-        # dicE = {"jmp": "01111", "jlt": "10000", "jgt": "10001", "je": "10010"}
-        # dicRegister = {"R0": "000", "R1": "001", "R2": "010", "R3": "011", "R4": "100", "R5": "101", "R6": "110",
-        #                "FLAGS": "111"}
 
         lstA = ["00000", "00001", "00110", "01010", "01011", "01100"]
         lstB = ["00010", "01000", "01001"]
@@ -77,8 +84,6 @@ class ExecutionEngine:
         # registers = ["000", "001", "010", "011", "100", "101", "110", "111"]
         registersdic = {"000": 0, "001": 1, "010": 2, "011": 3, "100": 4, "101": 5, "110": 6, "111": 7}
 
-        # regis = []
-        # print(self.registerFile)
         if inst == "1001100000000000":
             self.halted = True
             self.nextPC += 1
@@ -235,14 +240,11 @@ class ExecutionEngine:
                     self.halted = False
                     self.nextPC = int(inst[8:16], 2)
 
-                # regis[1] = inst[9:17]
-
         return self.halted, self.nextPC
 
 
 def main():
     memory = Memory()
-    # print(memory.mem)
     registerFile = RegisterFile()
     executionEngine = ExecutionEngine(memory, registerFile)
     PC = ProgramCounter(0)
@@ -258,7 +260,7 @@ def main():
         cycle += 1
 
     memory.dump()
-    # memory.showTraces()
+    memory.showTraces()
 
 
 if __name__ == '__main__':
