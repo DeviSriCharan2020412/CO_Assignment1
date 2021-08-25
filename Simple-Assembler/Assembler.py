@@ -69,13 +69,13 @@ def error_identifier(list1, list2, labels, label_addr):
     count_hlt = 0
     s = 0
 
-    # if var != list(set(var)):
-    #     checker = True
-    #     sys.stdout.write("Error>> Misuse of variables\n")
-    #
-    # if labels != list(set(labels)):
-    #     checker = True
-    #     sys.stdout.write("Error>> Misuse of labels\n")
+    if len(var) != len(list(set(var))):
+        checker = True
+        sys.stdout.write("Error>> Misuse of variables\n")
+
+    if len(labels) != len(list(set(labels))):
+        checker = True
+        sys.stdout.write("Error>> Misuse of labels\n")
 
     for k in range(len(code)):
         if code[k][0] != "var":
@@ -100,9 +100,15 @@ def error_identifier(list1, list2, labels, label_addr):
             if code[k][0] not in list_typeA and code[k][0][-1] != ":":
                 checker = True
                 sys.stdout.write("Error>> Line: " + str(k + 1) + " Typos in instruction name\n")
+
+            if code[k][0] in list_typeA:
                 if (code[k][1] not in list_register) or (code[k][2] not in list_register) or (code[k][3] not in list_register):
                     checker = True
                     sys.stdout.write("Error>> Line: " + str(k + 1) + " Typos in register name\n")
+
+                if code[k][1] == "FLAGS":
+                    checker = True
+                    sys.stdout.write("Error>> Line: " + str(k + 1) + " Illegal use of FLAGS register\n")
 
         elif (len(code[k])) == 3:
             if (code[k][0] not in list_typeB) and (code[k][0] not in list_typeC) and (code[k][0] not in list_typeD):
@@ -110,6 +116,10 @@ def error_identifier(list1, list2, labels, label_addr):
                 sys.stdout.write("Error>> Line: " + str(k + 1) + " Wrong syntax used for instructions\n")
 
             if code[k][0] in list_typeB:
+                if code[k][1] == "FLAGS":
+                    checker = True
+                    sys.stdout.write("Error>> Line: " + str(k + 1) + " Illegal use of FLAGS register\n")
+
                 if code[k][1] not in list_register:
                     checker = True
                     sys.stdout.write("Error>> Line: " + str(k + 1) + " Typos in register name\n")
@@ -119,15 +129,29 @@ def error_identifier(list1, list2, labels, label_addr):
                         checker = True
                         sys.stdout.write("Error>> Line: " + str(k + 1) + " Illegal Immediate values (less than 0 or more than 255)\n")
 
+                if code[k][2][0] != "F" and code[k][2][0] != "R" and code[k][2][0] != "$":
+                    checker = True
+                    sys.stdout.write("Error>> Line: " + str(k + 1) + " Wrong syntax for Immediate values\n")
+
             if (code[k][0] in list_typeC) and code[k][2][0] != "$":
                 if (code[k][1] not in list_register) or (code[k][2] not in list_register):
                     checker = True
                     sys.stdout.write("Error>> Line: " + str(k + 1) + " Typos in register name\n")
 
+            if code[k][0] in list_typeC:
+                if code[k][1] == "FLAGS":
+                    if code[k][2][0] != "$":
+                        checker = True
+                        sys.stdout.write("Error>> Line: " + str(k + 1) + " Illegal use of FLAGS register\n")
+
             if code[k][0] in list_typeD:
                 if code[k][1] not in list_register:
                     checker = True
                     sys.stdout.write("Error>> Line: " + str(k + 1) + " Typos in register name\n")
+
+                if (code[k][0] == "ld") and (code[k][1] == "FLAGS"):
+                    checker = True
+                    sys.stdout.write("Error>> Line: " + str(k + 1) + " Illegal use of FLAGS register\n")
 
                 if code[k][2] not in var:
                     checker = True
