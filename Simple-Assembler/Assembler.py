@@ -10,7 +10,7 @@ def TypeA(instruction, reg1, reg2, reg3):
 
 
 def TypeB(instruction, reg1, immediateValue):
-    dic1 = {"mov": "00010", "rs": "'01000", "ls": "01001"}
+    dic1 = {"mov": "00010", "rs": "01000", "ls": "01001"}
 
     dic2 = {"R0": "000", "R1": "001", "R2": "010", "R3": "011", "R4": "100", "R5": "101", "R6": "110", "FLAGS": "111"}
 
